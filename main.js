@@ -684,7 +684,7 @@ app.post('/upload', async (req, res) => {
 // Chat with FileSearch store (uses previously uploaded documents)
 app.post('/chat', async (req, res) => {
   try {
-    const { prompt, model, storeId, metadataFilter } = req.body || {};
+    const { prompt, model, storeId, metadataFilter, systemContext } = req.body || {};
 
     if (!prompt?.trim()) {
       return res.status(400).json({
