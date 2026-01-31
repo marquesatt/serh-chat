@@ -14,6 +14,33 @@ dotenv.config();
 // ============================================================================
 
 const app = express();
+
+// ============================================================================
+// CORS MIDDLEWARE - Must be before all routes
+// ============================================================================
+
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  
+  // Allow all origins for now (you can restrict later)
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS, PATCH');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.header('Access-Control-Max-Age', '86400');
+
+  // Handle preflight requests
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
+
+  next();
+});
+
+// ============================================================================
+// CONFIG & INITIALIZATION (continued)
+// ============================================================================
+
 const PORT = process.env.PORT || 3000;
 const ai = new GoogleGenAI({ apiKey: process.env.GOOGLE_API_KEY });
 const DATA_FILE = './data.json';
@@ -104,8 +131,6 @@ const rateLimitMiddleware = (req, res, next) => {
   }
   next();
 };
-
-app.use(rateLimitMiddleware);
 
 // ============================================================================
 // UTILITY FUNCTIONS
@@ -280,6 +305,7 @@ const uploadToGoogle = async (storeId, file) => {
 // ============================================================================
 
 app.use(express.json());
+app.use(rateLimitMiddleware);
 
 // Health check
 app.get('/', async (req, res) => {
