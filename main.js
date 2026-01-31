@@ -330,6 +330,33 @@ const normalizeFileName = (fileId) => {
   return fileId.startsWith('files/') ? fileId : `files/${fileId}`;
 };
 
+const MIME_BY_EXT = {
+  '.pdf': 'application/pdf',
+  '.txt': 'text/plain',
+  '.md': 'text/markdown',
+  '.json': 'application/json',
+  '.csv': 'text/csv',
+  '.doc': 'application/msword',
+  '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  '.xls': 'application/vnd.ms-excel',
+  '.xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+};
+
+const normalizeMimeType = (mimeType, filename) => {
+  const raw = (mimeType || '').toLowerCase();
+  const trimmed = raw.split(';')[0].trim();
+  if (trimmed && trimmed.includes('/')) {
+    return trimmed;
+  }
+
+  const ext = path.extname(filename || '').toLowerCase();
+  if (ext && MIME_BY_EXT[ext]) {
+    return MIME_BY_EXT[ext];
+  }
+
+  return 'application/octet-stream';
+};
+
 // ============================================================================
 // FILE PARSING & UPLOAD
 // ============================================================================
@@ -365,7 +392,7 @@ const parseFiles = async (req) => {
           if (fileErrors.length === 0) {
             files.push({
               filename: info.filename,
-              mimeType: info.mimeType,
+              mimeType: normalizeMimeType(info.mimeType, info.filename),
               buffer: Buffer.concat(chunks),
               size
             });
