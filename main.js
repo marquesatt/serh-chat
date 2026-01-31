@@ -402,7 +402,10 @@ const uploadToGoogle = async (storeId, file) => {
     const response = await ai.fileSearchStores.uploadToFileSearchStore({
       file: tempPath,
       fileSearchStoreName: storeId,
-      config: { displayName: file.filename }
+      config: {
+        displayName: file.filename,
+        mimeType: file.mimeType
+      }
     });
 
     // Wait for operation to complete
