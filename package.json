@@ -1,18 +1,31 @@
-﻿{
+{
   "name": "serh-chat",
   "version": "1.0.0",
-  "description": "API FileSearch com Google GenAI",
+  "description": "SERHChat - API robusta de integração com Google Gemini FileSearch para gerenciamento inteligente de documentos",
   "main": "main.js",
   "type": "module",
+  "author": "Your Name",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "scripts": {
     "start": "node main.js",
-    "dev": "node --watch main.js"
+    "dev": "node --watch main.js",
+    "test": "powershell -NoProfile -Command '.\\test-api.ps1'"
   },
+  "keywords": [
+    "google-gemini",
+    "file-search",
+    "rag",
+    "document-management",
+    "api",
+    "express"
+  ],
   "dependencies": {
     "@google/genai": "^1.0.0",
-    "lowdb": "^6.0.1",
+    "busboy": "^1.6.0",
     "dotenv": "^16.0.3",
-    "express": "^4.18.2",
-    "busboy": "^1.6.0"
+    "express": "^4.18.2"
   }
 }
